@@ -3,11 +3,13 @@ package main
 import (
 	// "errors"
 	// "fmt"
+	config "cafe/configs"
 	"cafe/internal"
 	"cafe/internal/baristo"
 	"cafe/internal/cashier"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -29,9 +31,8 @@ const (
 
 var (
 	chanRequest         chan int                  = make(chan int)
-	chanRequestGetOrder chan int                  = make(chan int)
-	chanRequestOrder    chan int                  = make(chan int)
 	chanRequestNewOrder chan internal.ListPositon = make(chan internal.ListPositon)
+	chanRequestGetOrder chan int                  = make(chan int)
 
 	chanResponseMenu       chan internal.MenuList = make(chan internal.MenuList)
 	chanResponseOrderWork  chan []internal.Order  = make(chan []internal.Order)
@@ -40,7 +41,14 @@ var (
 	chanResponseIdNewOrder chan internal.OrderId  = make(chan internal.OrderId)
 )
 
+const pathConfig string = "config.ini"
+
 func main() {
+
+	conf, err := config.LoadConfig(pathConfig)
+	if err != nil {
+		os.Exit(1)
+	}
 
 	chanCashierToBaristo := make(chan internal.Order, 100)
 	chanBaristoToCashier := make(chan internal.Order)
@@ -48,6 +56,11 @@ func main() {
 	go WorkingBaristo(chanCashierToBaristo, chanBaristoToCashier)
 	go WorkingCashier(chanCashierToBaristo, chanBaristoToCashier)
 
+	StartServer(conf.Port)
+
+}
+
+func StartServer(port int) {
 	e := echo.New()
 
 	e.GET("/menu", requestMenu)
@@ -56,7 +69,9 @@ func main() {
 	e.POST("/order", requestNewOrder)
 	e.POST("/orderReceve", requestOrder)
 
-	e.Logger.Fatal(e.Start(":1323"))
+	address := fmt.Sprintf(":%v", port)
+
+	e.Logger.Fatal(e.Start(address))
 
 }
 
@@ -142,7 +157,6 @@ func requestMenu(c echo.Context) error {
 
 	chanRequest <- MENU
 	menu := <-chanResponseMenu
-	fmt.Println(menu)
 
 	return c.JSON(http.StatusOK, menu)
 }
