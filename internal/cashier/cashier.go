@@ -5,6 +5,14 @@ import (
 	"errors"
 )
 
+var MenuDefault []internal.Drink = []internal.Drink{
+	*internal.NewDrink("Вода", internal.WATER),
+	*internal.NewDrink("Капучино", internal.CAPUCCINO),
+	*internal.NewDrink("Эспрессо", internal.EXPRESSO),
+	*internal.NewDrink("Американо", internal.AMERICANO),
+	*internal.NewDrink("Ристретто", internal.RYSTRETTO),
+}
+
 type Cashier struct {
 	Orders         map[int]internal.Order
 	ListOrderWork  map[int]bool
@@ -16,11 +24,15 @@ type Cashier struct {
 
 func NewCashier(listMenu internal.MenuList) *Cashier {
 	return &Cashier{
-		listMenu: listMenu,
+		Orders:         map[int]internal.Order{},
+		ListOrderWork:  map[int]bool{},
+		ListOrderReady: map[int]bool{},
+		lasOrderId:     0,
+		listMenu:       listMenu,
 	}
 }
 
-func (c *Cashier) Menu(typeDrink internal.TypeDrink, count int) internal.MenuList {
+func (c *Cashier) Menu() internal.MenuList {
 
 	return c.listMenu
 }
@@ -68,7 +80,18 @@ func (c *Cashier) GetOrder(id int) (internal.Order, error) {
 
 }
 
-func (c *Cashier) GetListWorkOrders(id int) []internal.Order {
+func (c *Cashier) Order(id int) (internal.Order, error) {
+
+	order, exists := c.Orders[id]
+
+	if !exists {
+		return order, errors.New("Not found Order")
+	}
+
+	return order, nil
+}
+
+func (c *Cashier) GetListWorkOrders() []internal.Order {
 
 	list := []internal.Order{}
 
@@ -84,7 +107,7 @@ func (c *Cashier) GetListWorkOrders(id int) []internal.Order {
 
 }
 
-func (c *Cashier) GetLisReadyOrders(id int) []internal.Order {
+func (c *Cashier) GetLisReadyOrders() []internal.Order {
 
 	list := []internal.Order{}
 

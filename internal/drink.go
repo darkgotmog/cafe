@@ -11,8 +11,8 @@ const (
 )
 
 type Drink struct {
-	Name string
-	Type TypeDrink
+	Name string    `json:"name"`
+	Type TypeDrink `json:"type"`
 }
 
 func NewDrink(name string, typeDrink TypeDrink) *Drink {
