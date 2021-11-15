@@ -35,7 +35,7 @@ func TestServer(t *testing.T) {
 
 func testMenu(t *testing.T) {
 	req := require.New(t)
-	resp, err := http.Get("http://127.0.0.1:1323/menu")
+	resp, err := http.Get("http://127.0.0.1:1323/api/v1/menu")
 
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
@@ -66,7 +66,7 @@ func testPlaceOrder(t *testing.T, list internal.ListPositon) {
 
 	req.NoError(err)
 
-	resp, err := http.Post("http://127.0.0.1:1323/order", "application/json", bytes.NewBuffer(json_data))
+	resp, err := http.Post("http://127.0.0.1:1323/api/v1/order", "application/json", bytes.NewBuffer(json_data))
 
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
@@ -83,7 +83,7 @@ func testPlaceOrder(t *testing.T, list internal.ListPositon) {
 
 func testOrderWork(t *testing.T) {
 	req := require.New(t)
-	resp, err := http.Get("http://127.0.0.1:1323/orderWork")
+	resp, err := http.Get("http://127.0.0.1:1323/api/v1/orderWork")
 
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
@@ -97,7 +97,7 @@ func testOrderWork(t *testing.T) {
 
 func testOrderReady(t *testing.T) {
 	req := require.New(t)
-	resp, err := http.Get("http://127.0.0.1:1323/orderReady")
+	resp, err := http.Get("http://127.0.0.1:1323/api/v1/orderReady")
 
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
@@ -120,7 +120,7 @@ func testOrderReceve(t *testing.T) {
 	json_data, err := json.Marshal(orderId)
 
 	req.NoError(err)
-	resp, err := http.Post("http://127.0.0.1:1323/orderReceve", "application/json", bytes.NewBuffer(json_data))
+	resp, err := http.Post("http://127.0.0.1:1323/api/v1/orderReceve", "application/json", bytes.NewBuffer(json_data))
 
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)

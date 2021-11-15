@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type CustomContext struct {
@@ -43,6 +44,12 @@ var (
 
 const pathConfig string = "config.ini"
 
+// @title API
+// @version 1.0
+// @description Swagger API for Golang.
+// @host localhost:1323
+// @BasePath /api/v1
+
 func main() {
 
 	conf, err := config.LoadConfig(pathConfig)
@@ -63,14 +70,17 @@ func main() {
 func StartServer(port int) {
 	e := echo.New()
 
-	e.GET("/menu", requestMenu)
-	e.GET("/orderWork", requestOrderWork)
-	e.GET("/orderReady", requestOrderReady)
-	e.POST("/order", requestNewOrder)
-	e.POST("/orderReceve", requestOrder)
+	v1 := e.Group("/api/v1")
+	{
+		v1.GET("/menu", requestMenu)
+		v1.GET("/orderWork", requestOrderWork)
+		v1.GET("/orderReady", requestOrderReady)
+		v1.POST("/order", requestNewOrder)
+		v1.POST("/orderReceve", requestOrder)
+	}
 
 	address := fmt.Sprintf(":%v", port)
-
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.Logger.Fatal(e.Start(address))
 
 }
@@ -152,6 +162,15 @@ func WorkingCashier(chanCashierToBaristo chan internal.Order, chanBaristoToCashi
 	}
 
 }
+
+// requestMenu godoc
+// @Summary Get menu
+// @Description Get details of all orders
+// @Tags menu
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} nternal.MenuList
+// @Router /menu [get]
 
 func requestMenu(c echo.Context) error {
 
