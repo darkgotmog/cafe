@@ -1,30 +1,30 @@
 package baristo
 
 import (
-	"cafe/internal"
+	"cafe/model"
 	"fmt"
 	"time"
 )
 
-var CokingTimeDefault map[internal.TypeDrink]int = map[internal.TypeDrink]int{
-	internal.AMERICANO: 100,
-	internal.CAPUCCINO: 120,
-	internal.EXPRESSO:  80,
-	internal.RYSTRETTO: 180,
-	internal.WATER:     40,
+var CokingTimeDefault map[model.TypeDrink]int = map[model.TypeDrink]int{
+	model.AMERICANO: 100,
+	model.CAPUCCINO: 120,
+	model.EXPRESSO:  80,
+	model.RYSTRETTO: 180,
+	model.WATER:     40,
 }
 
 type Baristo struct {
-	cokingTime map[internal.TypeDrink]int
+	cokingTime map[model.TypeDrink]int
 }
 
-func NewBaristo(cokingTime map[internal.TypeDrink]int) *Baristo {
+func NewBaristo(cokingTime map[model.TypeDrink]int) *Baristo {
 	return &Baristo{
 		cokingTime: cokingTime,
 	}
 
 }
-func (b *Baristo) CokingDrink(typeDrink internal.TypeDrink, count int) bool {
+func (b *Baristo) CokingDrink(typeDrink model.TypeDrink, count int) bool {
 
 	timeCoking, ok := b.cokingTime[typeDrink]
 	if !ok {

@@ -3,7 +3,7 @@ package main
 import (
 	// "errors"
 	"bytes"
-	"cafe/internal"
+	"cafe/model"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -48,10 +48,10 @@ func testMenu(t *testing.T) {
 
 func testPlaceOrders(t *testing.T) {
 
-	list := []internal.ListPositon{}
+	list := []model.ListPositon{}
 
-	list = append(list, internal.ListPositon{List: []internal.Position{{Type: 1, Count: 2}, {Type: 3, Count: 1}}})
-	list = append(list, internal.ListPositon{List: []internal.Position{{Type: 4, Count: 1}, {Type: 0, Count: 1}}})
+	list = append(list, model.ListPositon{List: []model.Position{{Type: 1, Count: 2}, {Type: 3, Count: 1}}})
+	list = append(list, model.ListPositon{List: []model.Position{{Type: 4, Count: 1}, {Type: 0, Count: 1}}})
 
 	for _, value := range list {
 
@@ -59,7 +59,7 @@ func testPlaceOrders(t *testing.T) {
 	}
 }
 
-func testPlaceOrder(t *testing.T, list internal.ListPositon) {
+func testPlaceOrder(t *testing.T, list model.ListPositon) {
 	req := require.New(t)
 
 	json_data, err := json.Marshal(list)
@@ -88,7 +88,7 @@ func testOrderWork(t *testing.T) {
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
 
-	var result []internal.Order
+	var result []model.Order
 	errDecode := json.NewDecoder(resp.Body).Decode(&result)
 	req.NoError(errDecode)
 	req.Equal(2, len(result))
@@ -102,7 +102,7 @@ func testOrderReady(t *testing.T) {
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
 
-	var result []internal.Order
+	var result []model.Order
 	errDecode := json.NewDecoder(resp.Body).Decode(&result)
 	req.NoError(errDecode)
 }
@@ -110,11 +110,11 @@ func testOrderReady(t *testing.T) {
 func testOrderReceve(t *testing.T) {
 	req := require.New(t)
 
-	orderId := internal.OrderId{Id: 1}
-	wantOrder := internal.Order{
+	orderId := model.OrderId{Id: 1}
+	wantOrder := model.Order{
 		Id:    1,
 		Ready: true,
-		List:  []internal.Position{{Type: 1, Count: 2}, {Type: 3, Count: 1}},
+		List:  []model.Position{{Type: 1, Count: 2}, {Type: 3, Count: 1}},
 	}
 
 	json_data, err := json.Marshal(orderId)
@@ -125,7 +125,7 @@ func testOrderReceve(t *testing.T) {
 	req.NoError(err)
 	req.Equal(http.StatusOK, resp.StatusCode)
 
-	var result internal.Order
+	var result model.Order
 	errDecode := json.NewDecoder(resp.Body).Decode(&result)
 	req.NoError(errDecode)
 	req.Equal(wantOrder, result)
