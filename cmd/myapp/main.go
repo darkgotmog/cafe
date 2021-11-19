@@ -20,12 +20,6 @@ import (
 
 const pathConfig string = "config.ini"
 
-// @title API
-// @version 1.0
-// @description Swagger API for Golang.
-// @host localhost:1323
-// @BasePath /api/v1
-
 func main() {
 
 	conf, err := config.LoadConfig(pathConfig)
@@ -33,17 +27,23 @@ func main() {
 		os.Exit(1)
 	}
 
-	controller := controller.NewController()
+	cr := controller.NewController()
 
 	chanCashierToBaristo := make(chan model.Order, 100)
 	chanBaristoToCashier := make(chan model.Order)
 
 	service.BaristoService(chanCashierToBaristo, chanBaristoToCashier)
-	service.CashierService(chanCashierToBaristo, chanBaristoToCashier, controller)
+	service.CashierService(chanCashierToBaristo, chanBaristoToCashier, cr)
 
-	StartServer(conf.Port, controller)
+	StartServer(conf.Port, cr)
 
 }
+
+// @title API
+// @version 1.0
+// @description Cafe API .
+// @host localhost:1323
+// @BasePath /api/v1
 
 func StartServer(port int, cr *controller.Controller) {
 	e := echo.New()

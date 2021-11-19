@@ -9,13 +9,14 @@ import (
 )
 
 // RequestOrder godoc
-// @Summary post request example
+// @Summary RequestOrder
 // @Description  request order
 // @Accept json
-// @Produce plain
-// @Param id body  model.OrderId true "OrderId"
-// @Success 200 {string} {object} model.Order
-// @Router /api/v1/orderReceve [post]
+// @Produce json
+// @Param input body  model.OrderId true "OrderId"
+// @Success 200 {object} model.Order
+// @Failure 404 {string} string "Not Found"
+// @Router /orderReceve [post]
 
 func (cr *Controller) RequestOrder(c echo.Context) error {
 
@@ -32,12 +33,12 @@ func (cr *Controller) RequestOrder(c echo.Context) error {
 }
 
 // RequestOrderReady godoc
-// @Summary post  request orderReady
+// @Summary pRequestOrderReady
 // @Description  request orderReady
-// @Accept json
-// @Produce plain
-// @Success 200 {string} {object} []model.Order
-// @Router /api/v1/orderReady [get]
+// @Accept plain
+// @Produce json
+// @Success 200 {object} []model.Order
+// @Router /orderReady [get]
 
 func (cr *Controller) RequestOrderReady(c echo.Context) error {
 
@@ -47,12 +48,12 @@ func (cr *Controller) RequestOrderReady(c echo.Context) error {
 }
 
 // RequestOrderWork godoc
-// @Summary post  request orderWork
+// @Summary RequestOrderWork
 // @Description  request orderWork
-// @Accept json
-// @Produce plain
-// @Success 200 {string} {object} []model.Order
-// @Router /api/v1/orderWork [get]
+// @Accept plain
+// @Produce json
+// @Success 200 {object} []model.Order
+// @Router /orderWork [get]
 
 func (cr *Controller) RequestOrderWork(c echo.Context) error {
 
@@ -62,13 +63,13 @@ func (cr *Controller) RequestOrderWork(c echo.Context) error {
 }
 
 // RequestNewOrder godoc
-// @Summary post request example
+// @Summary RequestNewOrder
 // @Description  request order
 // @Accept json
-// @Produce plain
-// @Param message body model.ListPositon true "Add new Order"
-// @Success 200 {string} {object} model.OrderId
-// @Router /api/v1/orderReceve [post]
+// @Produce json
+// @Param input body model.ListPositon true "Add new Order"
+// @Success 200 {object} model.OrderId
+// @Router /orderReceve [post]
 
 func (cr *Controller) RequestNewOrder(c echo.Context) error {
 

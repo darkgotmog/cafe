@@ -8,13 +8,12 @@ import (
 )
 
 // RequestMenu godoc
-// @Summary post request example
+// @Summary RequestMenu
 // @Description  request menu
-// @Accept json
-// @Produce plain
-// @Param message body model.Menu true "Menu list"
-// @Success 200 {string}
-// @Router /api/v1/menu [get]
+// @Accept plain
+// @Produce json
+// @Success 200 {object} model.Menu
+// @Router /menu [get]
 
 func (cr *Controller) RequestMenu(c echo.Context) error {
 
